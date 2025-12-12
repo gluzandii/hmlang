@@ -1,3 +1,39 @@
+//! Token type classifications for the Hummingbird language.
+//!
+//! `TokenKind` enumerates all possible token types the lexer can produce,
+//! including keywords, identifiers, literals, delimiters, and operators.
+
+/// The type and classification of a token produced by the lexer.
+///
+/// `TokenKind` represents the semantic category of a token, distinguishing
+/// between keywords (reserved words), identifiers (variable names), various
+/// types of literals, and punctuation/operators.
+///
+/// # Variants
+///
+/// ## Keywords
+/// - Control flow: `Func`, `Return`, `If`, `Else`, `Elif`, `Loop`, `Switch`, `Case`
+/// - Declarations: `Var`, `Const`, `Final`
+/// - Types: `Int8`, `Int16`, `Int32`, `Int64`, `Unsigned8`, `Unsigned16`, `Unsigned32`, `Unsigned64`, `Float`, `Double`, `String`, `Character`, `Struct`
+///
+/// ## Identifiers and Literals
+/// - `Identifier(String)`: User-defined names
+/// - `StringLiteral(String)`: Double-quoted strings
+/// - `CharacterLiteral(char)`: Single-quoted characters
+/// - `IntLiteral(i64)`: Signed integer constants
+/// - `UnsignedIntLiteral(u64)`: Unsigned integer constants
+/// - `FloatLiteral(String)`: Floating-point constants
+///
+/// ## Delimiters
+/// - Parentheses: `LeftParen`, `RightParen`
+/// - Braces: `LeftBrace`, `RightBrace`
+/// - Brackets: `LeftBracket`, `RightBracket`
+///
+/// ## Operators and Punctuation
+/// - `Colon`, `Semicolon`, `Comma`, `Dot`
+///
+/// ## Special
+/// - `Eof`: End of file marker
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum TokenKind {
     // Control Flow Keywords
@@ -61,6 +97,29 @@ pub enum TokenKind {
 }
 
 impl TokenKind {
+    /// Attempt to parse a string as a reserved keyword.
+    ///
+    /// This method checks if the provided string exactly matches a reserved
+    /// keyword and returns the corresponding token kind if found. It is
+    /// case-sensitive and matches the exact keyword names.
+    ///
+    /// # Arguments
+    ///
+    /// * `s` - The string to check as a potential keyword
+    ///
+    /// # Returns
+    ///
+    /// - `Some(TokenKind)` if `s` is a recognized keyword
+    /// - `None` if `s` is not a reserved keyword (user-defined identifier)
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use hm_lexer::token::tokenkind::TokenKind;
+    /// assert_eq!(TokenKind::keyword("if"), Some(TokenKind::If));
+    /// assert_eq!(TokenKind::keyword("myVar"), None);
+    /// assert_eq!(TokenKind::keyword("int32"), Some(TokenKind::Int32));
+    /// ```
     pub fn keyword(s: &str) -> Option<Self> {
         match s {
             // Control Flow

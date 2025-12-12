@@ -13,10 +13,7 @@ pub enum LexError {
 
     /// Unterminated string literal.
     #[error("Unterminated string literal at line {line}, column {column}")]
-    UnterminatedString {
-        line: usize,
-        column: usize,
-    },
+    UnterminatedString { line: usize, column: usize },
 
     /// Invalid escape sequence in a string.
     #[error("Invalid escape sequence '{sequence}' at line {line}, column {column}")]
@@ -36,17 +33,11 @@ pub enum LexError {
 
     /// Unexpected end of file.
     #[error("Unexpected end of file at line {line}, column {column}")]
-    UnexpectedEof {
-        line: usize,
-        column: usize,
-    },
+    UnexpectedEof { line: usize, column: usize },
 
     /// Invalid UTF-8 sequence encountered.
     #[error("Invalid UTF-8 sequence at line {line}, column {column}")]
-    InvalidUtf8 {
-        line: usize,
-        column: usize,
-    },
+    InvalidUtf8 { line: usize, column: usize },
 
     /// Empty input provided.
     #[error("Cannot create CharStream from empty input")]
@@ -54,7 +45,5 @@ pub enum LexError {
 
     /// Input too large to process.
     #[error("Input too large to process: {size} bytes")]
-    InputTooLarge {
-        size: usize,
-    },
+    InputTooLarge { size: usize },
 }

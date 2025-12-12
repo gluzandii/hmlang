@@ -85,7 +85,7 @@ impl CharStream {
 
     /// Look ahead `n` bytes from the current position without advancing.
     ///
-    /// `n = 0` is equivalent to [`peek`]. Returns `None` when the requested
+    /// `n = 0` is equivalent to calling `peek`. Returns `None` when the requested
     /// offset is past the end of the buffer.
     pub fn peek_n(&self, n: usize) -> Option<u8> {
         let idx = self.index.checked_add(n)?;
@@ -112,6 +112,30 @@ impl CharStream {
         }
 
         Some(b)
+    }
+
+    /// Advances the stream by `n` bytes.
+    ///
+    /// This function will call the `advance` method `n` times, consuming
+    /// bytes from the stream. If the end of the stream is reached before
+    /// consuming `n` bytes, the function will stop early.
+    ///
+    /// # Arguments
+    ///
+    /// * `n` - The number of bytes to advance in the stream.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let mut stream = CharStream::new(...);
+    /// stream.advance_n(5);
+    /// ```
+    pub fn advance_n(&mut self, n: usize) {
+        for _ in 0..n {
+            if self.advance().is_none() {
+                break;
+            }
+        }
     }
 
     /// Advance if the next byte matches `expected`.
@@ -153,13 +177,7 @@ impl CharStream {
 
     /// Skip bytes while a predicate holds, discarding the consumed span.
     pub fn skip_while<F: Fn(u8) -> bool>(&mut self, f: F) {
-        while let Some(b) = self.peek() {
-            if f(b) {
-                self.advance();
-            } else {
-                break;
-            }
-        }
+        let _ = self.consume_while(f);
     }
 
     /// Skip ASCII whitespace (space, tab, carriage return, newline).
@@ -168,7 +186,7 @@ impl CharStream {
     }
 
     /// Snapshot the current byte index and line/column for token starts.
-    pub fn current_start_pos(&self) -> (usize, usize, usize) {
+    pub fn current_position(&self) -> (usize, usize, usize) {
         (self.index, self.line, self.column)
     }
 }

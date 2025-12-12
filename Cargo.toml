@@ -1,0 +1,3 @@
+[workspace]
+members = ["hm-lexer"]
+resolver = "3"

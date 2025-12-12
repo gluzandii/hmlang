@@ -424,34 +424,67 @@ impl Lexer {
 
     /// Tokenize a numeric literal.
     ///
-    /// Currently supports decimal integers. The method accumulates all
-    /// consecutive digits and attempts to parse them as an `i64`.
+    /// Supports decimal integers and floating point numbers.
+    /// The method accumulates digits, optionally a decimal point and more digits,
+    /// then attempts to parse them as either an `i64` or `f64`.
     ///
     /// # Returns
     ///
-    /// - `Ok(Token)` with `TokenKind::IntLiteral` if parsing succeeds
-    /// - `Err(LexError::InvalidNumber)` if the number exceeds i64 range
+    /// - `Ok(Token)` with `TokenKind::IntLiteral` for integers
+    /// - `Ok(Token)` with `TokenKind::FloatLiteral` for floating point numbers
+    /// - `Err(LexError::InvalidNumber)` if the number is malformed or out of range
     fn lex_number(&mut self) -> Result<Token, LexError> {
         let (start_idx, start_line, start_col) = self.stream.current_position();
 
-        // Consume digits
-        let (lex_start, lex_end) = self.stream.consume_while(|b| matches!(b, b'0'..=b'9'));
+        // Consume initial digits
+        let (lex_start, _) = self.stream.consume_while(|b| matches!(b, b'0'..=b'9'));
+
+        // Check for decimal point (floating point number)
+        let is_float = if self.stream.peek() == Some(b'.') {
+            // Peek ahead to ensure there's a digit after the dot
+            // This prevents treating "42." as a float or "42.foo" as starting with a float
+            if matches!(self.stream.peek_n(1), Some(b'0'..=b'9')) {
+                self.stream.advance(); // consume '.'
+                // Consume fractional digits
+                self.stream.consume_while(|b| matches!(b, b'0'..=b'9'));
+                true
+            } else {
+                false
+            }
+        } else {
+            false
+        };
 
         let (end_idx, end_line, end_col) = self.stream.current_position();
 
         // Get the lexeme as a string
-        let lexeme_bytes = self.stream.slice(lex_start, lex_end);
+        let lexeme_bytes = self.stream.slice(lex_start, end_idx);
         let lexeme = String::from_utf8_lossy(lexeme_bytes).to_string();
 
-        // Try to parse as integer
-        let kind = match lexeme.parse::<i64>() {
-            Ok(val) => TokenKind::IntLiteral(val),
-            Err(_) => {
-                return Err(LexError::InvalidNumber {
-                    lexeme,
-                    line: start_line,
-                    column: start_col,
-                });
+        // Parse as integer or float
+        let kind = if is_float {
+            // Validate the float by parsing it
+            match lexeme.parse::<f64>() {
+                Ok(_) => TokenKind::FloatLiteral(lexeme.clone()),
+                Err(_) => {
+                    return Err(LexError::InvalidNumber {
+                        lexeme,
+                        line: start_line,
+                        column: start_col,
+                    });
+                }
+            }
+        } else {
+            // Try to parse as integer
+            match lexeme.parse::<i64>() {
+                Ok(val) => TokenKind::IntLiteral(val),
+                Err(_) => {
+                    return Err(LexError::InvalidNumber {
+                        lexeme,
+                        line: start_line,
+                        column: start_col,
+                    });
+                }
             }
         };
 

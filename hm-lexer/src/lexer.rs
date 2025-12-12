@@ -279,6 +279,73 @@ impl Lexer {
                 TokenKind::Slash,
                 "/"
             ),
+            b'%' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Percent,
+                "%"
+            ),
+            b'<' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::LessThan,
+                "<"
+            ),
+            b'>' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::GreaterThan,
+                ">"
+            ),
+            b'!' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Exclamation,
+                "!"
+            ),
+            b'&' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Ampersand,
+                "&"
+            ),
+            b'|' => {
+                single_char_token!(self, start_idx, start_line, start_col, TokenKind::Pipe, "|")
+            }
+            b'^' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Caret,
+                "^"
+            ),
+            b'~' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Tilde,
+                "~"
+            ),
+            b'?' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Question,
+                "?"
+            ),
 
             // Unexpected character
             _ => {
@@ -423,7 +490,7 @@ impl Lexer {
         let kind = if is_float {
             // Validate the float by parsing it
             match lexeme.parse::<f64>() {
-                Ok(_) => TokenKind::FloatLiteral(lexeme.clone()),
+                Ok(f) => TokenKind::FloatLiteral(f),
                 Err(_) => {
                     return Err(LexError::InvalidNumber {
                         lexeme,

@@ -77,7 +77,7 @@ pub enum TokenKind {
     CharacterLiteral(char),
     IntLiteral(i64),
     UnsignedIntLiteral(u64),
-    FloatLiteral(String),
+    FloatLiteral(f64),
 
     // Delimiters
     LeftParen,    // (
@@ -93,12 +93,21 @@ pub enum TokenKind {
     Comma,     // ,
     Dot,       // .
 
-    Plus,     // +
-    Minus,    // -
-    Asterisk, // *
-    Slash,    // /
-    Percent,  // %
-    Equal,    // =
+    Plus,        // +
+    Minus,       // -
+    Asterisk,    // *
+    Slash,       // /
+    Percent,     // %
+    Equal,       // =
+    LessThan,    // <
+    GreaterThan, // >
+    Exclamation, // !
+    Ampersand,   // &
+    Pipe,        // |
+    Caret,       // ^
+    Tilde,       // ~
+    Question,    // ?
+    Modulo,      // %
 
     // Special
     Eof,

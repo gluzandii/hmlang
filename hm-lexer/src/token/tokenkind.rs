@@ -92,6 +92,13 @@ pub enum TokenKind {
     Comma,     // ,
     Dot,       // .
 
+    Plus,        // +
+    Minus,       // -
+    Asterisk,    // *
+    Slash,       // /
+    Percent,     // %
+    Equal,       // =
+
     // Special
     Eof,
 }

@@ -46,3 +46,14 @@ pub struct Token {
     /// The original lexeme (text) from the source code.
     pub lexeme: String,
 }
+
+impl Token {
+    /// Checks if this token is the end-of-file (EOF) token.
+    ///
+    /// # Returns
+    ///
+    /// `true` if this token's kind is `TokenKind::Eof`, otherwise `false`.
+    pub fn is_eof(&self) -> bool {
+        matches!(self.kind, tokenkind::TokenKind::Eof)
+    }
+}

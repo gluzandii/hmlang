@@ -322,6 +322,96 @@ impl Lexer {
                 }
             }
 
+            b'=' => {
+                self.stream.advance();
+                let (end_idx, end_line, end_col) = self.stream.current_position();
+                let span = Span {
+                    start: start_idx,
+                    end: end_idx,
+                    line_start: start_line,
+                    column_start: start_col,
+                    line_end: end_line,
+                    column_end: end_col,
+                };
+                Token {
+                    kind: TokenKind::Equal,
+                    span: span,
+                    lexeme: String::from("="),
+                }
+            }
+
+            b'+' => {
+                self.stream.advance();
+                let (end_idx, end_line, end_col) = self.stream.current_position();
+                let span = Span {
+                    start: start_idx,
+                    end: end_idx,
+                    line_start: start_line,
+                    column_start: start_col,
+                    line_end: end_line,
+                    column_end: end_col,
+                };
+                Token {
+                    kind: TokenKind::Plus,
+                    span: span,
+                    lexeme: String::from("+"),
+                }
+            }
+
+            b'-' => {
+                self.stream.advance();
+                let (end_idx, end_line, end_col) = self.stream.current_position();
+                let span = Span {
+                    start: start_idx,
+                    end: end_idx,
+                    line_start: start_line,
+                    column_start: start_col,
+                    line_end: end_line,
+                    column_end: end_col,
+                };
+                Token {
+                    kind: TokenKind::Minus,
+                    span: span,
+                    lexeme: String::from("-"),
+                }
+            }
+
+            b'*' => {
+                self.stream.advance();
+                let (end_idx, end_line, end_col) = self.stream.current_position();
+                let span = Span {
+                    start: start_idx,
+                    end: end_idx,
+                    line_start: start_line,
+                    column_start: start_col,
+                    line_end: end_line,
+                    column_end: end_col,
+                };
+                Token {
+                    kind: TokenKind::Asterisk,
+                    span: span,
+                    lexeme: String::from("*"),
+                }
+            }
+
+            b'/' => {
+                self.stream.advance();
+                let (end_idx, end_line, end_col) = self.stream.current_position();
+                let span = Span {
+                    start: start_idx,
+                    end: end_idx,
+                    line_start: start_line,
+                    column_start: start_col,
+                    line_end: end_line,
+                    column_end: end_col,
+                };
+                Token {
+                    kind: TokenKind::Slash,
+                    span: span,
+                    lexeme: String::from("/"),
+                }
+            }
+
             // Unexpected character
             _ => {
                 let ch = byte as char;

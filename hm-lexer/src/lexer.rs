@@ -51,6 +51,26 @@ macro_rules! decode_escape {
     }};
 }
 
+macro_rules! single_char_token {
+    ($lexer:expr, $start_idx:expr, $start_line:expr, $start_col:expr, $kind:expr, $lexeme:expr) => {{
+        $lexer.stream.advance();
+        let (end_idx, end_line, end_col) = $lexer.stream.current_position();
+        let span = Span {
+            start: $start_idx,
+            end: end_idx,
+            line_start: $start_line,
+            column_start: $start_col,
+            line_end: end_line,
+            column_end: end_col,
+        };
+        Token {
+            kind: $kind,
+            span,
+            lexeme: String::from($lexeme),
+        }
+    }};
+}
+
 /// The main lexer that converts a byte stream into a sequence of tokens.
 ///
 /// `Lexer` is responsible for the lexical analysis phase of compilation.
@@ -149,268 +169,116 @@ impl Lexer {
             b'0'..=b'9' => self.lex_number()?,
 
             // Delimiters
-            b'(' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::LeftParen,
-                    span: span,
-                    lexeme: String::from("("),
-                }
-            }
-            b')' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::RightParen,
-                    span: span,
-                    lexeme: String::from(")"),
-                }
-            }
-            b'{' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::LeftBrace,
-                    span: span,
-                    lexeme: String::from("{"),
-                }
-            }
-            b'}' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::RightBrace,
-                    span: span,
-                    lexeme: String::from("}"),
-                }
-            }
-            b'[' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::LeftBracket,
-                    span: span,
-                    lexeme: String::from("["),
-                }
-            }
-            b']' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::RightBracket,
-                    span: span,
-                    lexeme: String::from("]"),
-                }
-            }
+            b'(' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::LeftParen,
+                "("
+            ),
+            b')' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::RightParen,
+                ")"
+            ),
+            b'{' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::LeftBrace,
+                "{"
+            ),
+            b'}' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::RightBrace,
+                "}"
+            ),
+            b'[' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::LeftBracket,
+                "["
+            ),
+            b']' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::RightBracket,
+                "]"
+            ),
 
             // Operators and punctuation
-            b':' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Colon,
-                    span: span,
-                    lexeme: String::from(":"),
-                }
-            }
-            b';' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Semicolon,
-                    span: span,
-                    lexeme: String::from(";"),
-                }
-            }
-            b',' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Comma,
-                    span: span,
-                    lexeme: String::from(","),
-                }
-            }
-            b'.' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Dot,
-                    span: span,
-                    lexeme: String::from("."),
-                }
-            }
-
-            b'=' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Equal,
-                    span: span,
-                    lexeme: String::from("="),
-                }
-            }
-
+            b':' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Colon,
+                ":"
+            ),
+            b';' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Semicolon,
+                ";"
+            ),
+            b',' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Comma,
+                ","
+            ),
+            b'.' => single_char_token!(self, start_idx, start_line, start_col, TokenKind::Dot, "."),
+            b'=' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Equal,
+                "="
+            ),
             b'+' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Plus,
-                    span: span,
-                    lexeme: String::from("+"),
-                }
+                single_char_token!(self, start_idx, start_line, start_col, TokenKind::Plus, "+")
             }
-
-            b'-' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Minus,
-                    span: span,
-                    lexeme: String::from("-"),
-                }
-            }
-
-            b'*' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Asterisk,
-                    span: span,
-                    lexeme: String::from("*"),
-                }
-            }
-
-            b'/' => {
-                self.stream.advance();
-                let (end_idx, end_line, end_col) = self.stream.current_position();
-                let span = Span {
-                    start: start_idx,
-                    end: end_idx,
-                    line_start: start_line,
-                    column_start: start_col,
-                    line_end: end_line,
-                    column_end: end_col,
-                };
-                Token {
-                    kind: TokenKind::Slash,
-                    span: span,
-                    lexeme: String::from("/"),
-                }
-            }
+            b'-' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Minus,
+                "-"
+            ),
+            b'*' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Asterisk,
+                "*"
+            ),
+            b'/' => single_char_token!(
+                self,
+                start_idx,
+                start_line,
+                start_col,
+                TokenKind::Slash,
+                "/"
+            ),
 
             // Unexpected character
             _ => {

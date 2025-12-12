@@ -69,6 +69,7 @@ pub enum TokenKind {
     String,
     Character,
     Struct,
+    Void,
 
     // Identifiers and Literals
     Identifier(String),
@@ -92,12 +93,12 @@ pub enum TokenKind {
     Comma,     // ,
     Dot,       // .
 
-    Plus,        // +
-    Minus,       // -
-    Asterisk,    // *
-    Slash,       // /
-    Percent,     // %
-    Equal,       // =
+    Plus,     // +
+    Minus,    // -
+    Asterisk, // *
+    Slash,    // /
+    Percent,  // %
+    Equal,    // =
 
     // Special
     Eof,
@@ -162,6 +163,7 @@ impl TokenKind {
             "string" => Some(TokenKind::String),
             "character" => Some(TokenKind::Character),
             "struct" => Some(TokenKind::Struct),
+            "void" => Some(TokenKind::Void),
 
             _ => None,
         }

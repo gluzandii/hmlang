@@ -4,6 +4,7 @@
 //! including keywords, identifiers, literals, delimiters, and operators.
 
 use crate::token::operators::arith::ArithOperator;
+use crate::token::operators::rel::RelationalOperator;
 
 /// The type and classification of a token produced by the lexer.
 ///
@@ -99,9 +100,11 @@ pub enum TokenKind {
     // +, -, *, /, %, **
     ArithmeticOperator(ArithOperator),
 
+    // Relational Operators
+    // <, <=, >, >=, ==, !=
+    RelationalOperator(RelationalOperator),
+
     Equal,       // =
-    LessThan,    // <
-    GreaterThan, // >
     Exclamation, // !
     Ampersand,   // &
     Pipe,        // |

@@ -5,6 +5,7 @@
 
 pub mod span;
 pub mod tokenkind;
+pub mod operators;
 
 /// A single token produced by the lexer.
 ///

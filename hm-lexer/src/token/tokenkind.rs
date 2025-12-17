@@ -3,6 +3,8 @@
 //! `TokenKind` enumerates all possible token types the lexer can produce,
 //! including keywords, identifiers, literals, delimiters, and operators.
 
+use crate::token::operators::arith::ArithOperator;
+
 /// The type and classification of a token produced by the lexer.
 ///
 /// `TokenKind` represents the semantic category of a token, distinguishing
@@ -93,11 +95,10 @@ pub enum TokenKind {
     Comma,     // ,
     Dot,       // .
 
-    Plus,        // +
-    Minus,       // -
-    Asterisk,    // *
-    Slash,       // /
-    Percent,     // %
+    // Arithmetic Operators
+    // +, -, *, /, %, **
+    ArithmeticOperator(ArithOperator),
+
     Equal,       // =
     LessThan,    // <
     GreaterThan, // >

@@ -4,6 +4,7 @@
 //! including keywords, identifiers, literals, delimiters, and operators.
 
 use crate::token::operators::arithmetic::ArithmeticOperator;
+use crate::token::operators::assignment::AssignmentOperator;
 use crate::token::operators::logical::LogicalOperator;
 use crate::token::operators::relational::RelationalOperator;
 
@@ -110,13 +111,9 @@ pub enum TokenKind {
     // &&, ||, !
     LogicalOperator(LogicalOperator),
 
-    Equal,       // =
-    Ampersand,   // &
-    Pipe,        // |
-    Caret,       // ^
-    Tilde,       // ~
-    Question,    // ?
-    Modulo,      // %
+    // Assignment Operators
+    // =, +=, -=, *=, /=, %=
+    AssignmentOperator(AssignmentOperator),
 
     // Special
     Eof,

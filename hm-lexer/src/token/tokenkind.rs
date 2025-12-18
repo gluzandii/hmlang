@@ -5,6 +5,7 @@
 
 use crate::token::operators::arithmetic::ArithmeticOperator;
 use crate::token::operators::assignment::AssignmentOperator;
+use crate::token::operators::bitwise::BitwiseOperator;
 use crate::token::operators::logical::LogicalOperator;
 use crate::token::operators::relational::RelationalOperator;
 
@@ -114,6 +115,12 @@ pub enum TokenKind {
     // Assignment Operators
     // =, +=, -=, *=, /=, %=
     AssignmentOperator(AssignmentOperator),
+
+    // Bitwise Operators
+    // &, |, ^, ~, <<, >>
+    BitwiseOperator(BitwiseOperator),
+
+    PointerAccessOperator, // ->
 
     // Special
     Eof,

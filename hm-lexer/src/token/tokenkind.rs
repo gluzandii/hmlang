@@ -100,6 +100,8 @@ pub enum TokenKind {
     Comma,     // ,
     Dot,       // .
 
+    ScopingOperator, // ::
+
     // Arithmetic Operators
     // +, -, *, /, %, **
     ArithmeticOperator(ArithmeticOperator),

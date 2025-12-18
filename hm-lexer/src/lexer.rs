@@ -224,14 +224,36 @@ impl Lexer {
             ),
 
             // Operators and punctuation
-            b':' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::Colon,
-                ":"
-            ),
+            b':' => {
+                if self.stream.peek_n(1) == Some(b':') {
+                    // :: scoping operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::ScopingOperator,
+                        span,
+                        lexeme: String::from("::"),
+                    }
+                } else {
+                    // : colon
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::Colon,
+                        ":"
+                    )
+                }
+            }
             b';' => single_char_token!(
                 self,
                 start_idx,
@@ -249,83 +271,386 @@ impl Lexer {
                 ","
             ),
             b'.' => single_char_token!(self, start_idx, start_line, start_col, TokenKind::Dot, "."),
-            b'=' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::AssignmentOperator(AssignmentOperator::Assign),
-                "="
-            ),
-            b'+' => {
-                single_char_token!(self, start_idx, start_line, start_col, TokenKind::ArithmeticOperator(ArithmeticOperator::Plus), "+")
+            b'=' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // == operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::RelationalOperator(RelationalOperator::Equal),
+                        span,
+                        lexeme: String::from("=="),
+                    }
+                } else {
+                    // = assignment operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::AssignmentOperator(AssignmentOperator::Assign),
+                        "="
+                    )
+                }
             }
-            b'-' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::ArithmeticOperator(ArithmeticOperator::Minus),
-                "-"
-            ),
-            b'*' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::ArithmeticOperator(ArithmeticOperator::Asterisk),
-                "*"
-            ),
-            b'/' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::ArithmeticOperator(ArithmeticOperator::Slash),
-                "/"
-            ),
-            b'%' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::ArithmeticOperator(ArithmeticOperator::Modulo),
-                "%"
-            ),
-            b'<' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::RelationalOperator(RelationalOperator::LessThan),
-                "<"
-            ),
-            b'>' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::RelationalOperator(RelationalOperator::GreaterThan),
-                ">"
-            ),
-            b'!' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::LogicalOperator(LogicalOperator::Not),
-                "!"
-            ),
-            b'&' => single_char_token!(
-                self,
-                start_idx,
-                start_line,
-                start_col,
-                TokenKind::BitwiseOperator(BitwiseOperator::And),
-                "&"
-            ),
+            b'+' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // += operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::AssignmentOperator(AssignmentOperator::AddAssign),
+                        span,
+                        lexeme: String::from("+="),
+                    }
+                } else {
+                    // + arithmetic operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::ArithmeticOperator(ArithmeticOperator::Plus),
+                        "+"
+                    )
+                }
+            }
+            b'-' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // -= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::AssignmentOperator(AssignmentOperator::SubtractAssign),
+                        span,
+                        lexeme: String::from("-="),
+                    }
+                } else {
+                    // - arithmetic operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::ArithmeticOperator(ArithmeticOperator::Minus),
+                        "-"
+                    )
+                }
+            }
+            b'*' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // *= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::AssignmentOperator(AssignmentOperator::MultiplyAssign),
+                        span,
+                        lexeme: String::from("*="),
+                    }
+                } else if self.stream.peek_n(1) == Some(b'*') {
+                    // ** operator (exponent)
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::ArithmeticOperator(ArithmeticOperator::Exponent),
+                        span,
+                        lexeme: String::from("**"),
+                    }
+                } else {
+                    // * arithmetic operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::ArithmeticOperator(ArithmeticOperator::Asterisk),
+                        "*"
+                    )
+                }
+            }
+            b'/' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // /= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::AssignmentOperator(AssignmentOperator::DivideAssign),
+                        span,
+                        lexeme: String::from("/="),
+                    }
+                } else {
+                    // / arithmetic operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::ArithmeticOperator(ArithmeticOperator::Slash),
+                        "/"
+                    )
+                }
+            }
+            b'%' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // %= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::AssignmentOperator(AssignmentOperator::ModuloAssign),
+                        span,
+                        lexeme: String::from("%="),
+                    }
+                } else {
+                    // % arithmetic operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::ArithmeticOperator(ArithmeticOperator::Modulo),
+                        "%"
+                    )
+                }
+            }
+            b'<' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // <= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::RelationalOperator(RelationalOperator::LessThanOrEqual),
+                        span,
+                        lexeme: String::from("<="),
+                    }
+                } else if self.stream.peek_n(1) == Some(b'<') {
+                    // << operator (left shift)
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::BitwiseOperator(BitwiseOperator::LeftShift),
+                        span,
+                        lexeme: String::from("<<"),
+                    }
+                } else {
+                    // < operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::RelationalOperator(RelationalOperator::LessThan),
+                        "<"
+                    )
+                }
+            }
+            b'>' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // >= operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::RelationalOperator(RelationalOperator::GreaterThanOrEqual),
+                        span,
+                        lexeme: String::from(">="),
+                    }
+                } else if self.stream.peek_n(1) == Some(b'>') {
+                    // >> operator (right shift)
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::BitwiseOperator(BitwiseOperator::RightShift),
+                        span,
+                        lexeme: String::from(">>"),
+                    }
+                } else {
+                    // > operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::RelationalOperator(RelationalOperator::GreaterThan),
+                        ">"
+                    )
+                }
+            }
+            b'!' => {
+                if self.stream.peek_n(1) == Some(b'=') {
+                    // != operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::RelationalOperator(RelationalOperator::NotEqual),
+                        span,
+                        lexeme: String::from("!="),
+                    }
+                } else {
+                    // ! logical NOT operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::LogicalOperator(LogicalOperator::Not),
+                        "!"
+                    )
+                }
+            }
+            b'&' => {
+                if self.stream.peek_n(1) == Some(b'&') {
+                    // && operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::LogicalOperator(LogicalOperator::And),
+                        span,
+                        lexeme: String::from("&&"),
+                    }
+                } else {
+                    // & bitwise AND operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::BitwiseOperator(BitwiseOperator::And),
+                        "&"
+                    )
+                }
+            }
             b'|' => {
-                single_char_token!(self, start_idx, start_line, start_col, TokenKind::BitwiseOperator(BitwiseOperator::Or), "|")
+                if self.stream.peek_n(1) == Some(b'|') {
+                    // || operator
+                    self.stream.advance_n(2);
+                    let (end_idx, end_line, end_col) = self.stream.current_position();
+                    let span = Span {
+                        start: start_idx,
+                        end: end_idx,
+                        line_start: start_line,
+                        column_start: start_col,
+                        line_end: end_line,
+                        column_end: end_col,
+                    };
+                    Token {
+                        kind: TokenKind::LogicalOperator(LogicalOperator::Or),
+                        span,
+                        lexeme: String::from("||"),
+                    }
+                } else {
+                    // | bitwise OR operator
+                    single_char_token!(
+                        self,
+                        start_idx,
+                        start_line,
+                        start_col,
+                        TokenKind::BitwiseOperator(BitwiseOperator::Or),
+                        "|"
+                    )
+                }
             }
             b'^' => single_char_token!(
                 self,

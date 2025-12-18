@@ -13,6 +13,6 @@ pub enum ArithmeticOperator {
     Minus,       // -
     Asterisk,    // *
     Slash,       // /
-    Percent,     // %
+    Modulo,     // %
     Exponent,    // **
 }

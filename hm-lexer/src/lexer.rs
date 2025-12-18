@@ -5,7 +5,12 @@
 
 use crate::charstream::CharStream;
 use crate::lexerror::LexError;
-use crate::token::{Token, span::Span, tokenkind::TokenKind};
+use crate::token::operators::arithmetic::ArithmeticOperator;
+use crate::token::operators::assignment::AssignmentOperator;
+use crate::token::operators::bitwise::BitwiseOperator;
+use crate::token::operators::logical::LogicalOperator;
+use crate::token::operators::relational::RelationalOperator;
+use crate::token::{span::Span, tokenkind::TokenKind, Token};
 
 macro_rules! decode_escape {
     ($lexer:expr, $quote:expr, $start_line:expr, $start_col:expr) => {{
@@ -249,18 +254,18 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Equal,
+                TokenKind::AssignmentOperator(AssignmentOperator::Assign),
                 "="
             ),
             b'+' => {
-                single_char_token!(self, start_idx, start_line, start_col, TokenKind::Plus, "+")
+                single_char_token!(self, start_idx, start_line, start_col, TokenKind::ArithmeticOperator(ArithmeticOperator::Plus), "+")
             }
             b'-' => single_char_token!(
                 self,
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Minus,
+                TokenKind::ArithmeticOperator(ArithmeticOperator::Minus),
                 "-"
             ),
             b'*' => single_char_token!(
@@ -268,7 +273,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Asterisk,
+                TokenKind::ArithmeticOperator(ArithmeticOperator::Asterisk),
                 "*"
             ),
             b'/' => single_char_token!(
@@ -276,7 +281,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Slash,
+                TokenKind::ArithmeticOperator(ArithmeticOperator::Slash),
                 "/"
             ),
             b'%' => single_char_token!(
@@ -284,7 +289,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Percent,
+                TokenKind::ArithmeticOperator(ArithmeticOperator::Modulo),
                 "%"
             ),
             b'<' => single_char_token!(
@@ -292,7 +297,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::LessThan,
+                TokenKind::RelationalOperator(RelationalOperator::LessThan),
                 "<"
             ),
             b'>' => single_char_token!(
@@ -300,7 +305,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::GreaterThan,
+                TokenKind::RelationalOperator(RelationalOperator::GreaterThan),
                 ">"
             ),
             b'!' => single_char_token!(
@@ -308,7 +313,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Exclamation,
+                TokenKind::LogicalOperator(LogicalOperator::Not),
                 "!"
             ),
             b'&' => single_char_token!(
@@ -316,18 +321,18 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Ampersand,
+                TokenKind::BitwiseOperator(BitwiseOperator::And),
                 "&"
             ),
             b'|' => {
-                single_char_token!(self, start_idx, start_line, start_col, TokenKind::Pipe, "|")
+                single_char_token!(self, start_idx, start_line, start_col, TokenKind::BitwiseOperator(BitwiseOperator::Or), "|")
             }
             b'^' => single_char_token!(
                 self,
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Caret,
+                TokenKind::BitwiseOperator(BitwiseOperator::Xor),
                 "^"
             ),
             b'~' => single_char_token!(
@@ -335,7 +340,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Tilde,
+                TokenKind::BitwiseOperator(BitwiseOperator::Not),
                 "~"
             ),
             b'?' => single_char_token!(
@@ -343,7 +348,7 @@ impl Lexer {
                 start_idx,
                 start_line,
                 start_col,
-                TokenKind::Question,
+                TokenKind::QuestionMark,
                 "?"
             ),
 

@@ -122,6 +122,8 @@ pub enum TokenKind {
 
     PointerAccessOperator, // ->
 
+    QuestionMark, // ?
+
     // Special
     Eof,
 }

@@ -1,18 +1,30 @@
-/// Relational operators used in expressions.
+//! Relational (comparison) operator types.
+
+/// Relational operators used for comparing values.
+///
+/// These operators compare two values and produce a boolean result.
+/// They are commonly used in conditional expressions and control flow statements.
 ///
 /// # Variants
-/// - `LessThan`: Represents the `<` operator.
-/// - `GreaterThan`: Represents the `>` operator.
-/// - `LessThanOrEqual`: Represents the `<=` operator.
-/// - `GreaterThanOrEqual`: Represents the `>=` operator.
-/// - `Equal`: Represents the `==` operator.
-/// - `NotEqual`: Represents the `!=` operator.
+///
+/// - `LessThan`: Less than comparison (`<`)
+/// - `GreaterThan`: Greater than comparison (`>`)
+/// - `LessThanOrEqual`: Less than or equal comparison (`<=`)
+/// - `GreaterThanOrEqual`: Greater than or equal comparison (`>=`)
+/// - `Equal`: Equality comparison (`==`)
+/// - `NotEqual`: Inequality comparison (`!=`)
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum RelationalOperator {
-    LessThan,          // <
-    GreaterThan,       // >
-    LessThanOrEqual,   // <=
-    GreaterThanOrEqual,// >=
-    Equal,             // ==
-    NotEqual,          // !=
+    /// Less than operator (`<`)
+    LessThan,
+    /// Greater than operator (`>`)
+    GreaterThan,
+    /// Less than or equal operator (`<=`)
+    LessThanOrEqual,
+    /// Greater than or equal operator (`>=`)
+    GreaterThanOrEqual,
+    /// Equality operator (`==`)
+    Equal,
+    /// Inequality operator (`!=`)
+    NotEqual,
 }

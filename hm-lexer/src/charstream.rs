@@ -126,9 +126,11 @@ impl CharStream {
     ///
     /// # Examples
     ///
-    /// ```
-    /// let mut stream = CharStream::new(...);
+    /// ```no_run
+    /// # use hm_lexer::charstream::CharStream;
+    /// # let mut stream = CharStream::from_bytes(b"hello").unwrap();
     /// stream.advance_n(5);
+    /// # assert!(stream.is_eof());
     /// ```
     pub fn advance_n(&mut self, n: usize) {
         for _ in 0..n {

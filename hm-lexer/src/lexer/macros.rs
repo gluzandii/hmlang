@@ -47,9 +47,28 @@ macro_rules! decode_escape {
     }};
 }
 
-/// Macro to create a single-character token.
-/// It advances the lexer stream, captures the current position,
+/// Create a single-character token with automatic position tracking.
+///
+/// This macro advances the lexer stream by one character, captures the current position,
 /// and constructs a Token with the provided kind and lexeme.
+///
+/// # Arguments
+///
+/// - `$lexer`: Mutable reference to the lexer
+/// - `$start_idx`: Starting byte index of the token
+/// - `$start_line`: Starting line number of the token
+/// - `$start_col`: Starting column number of the token
+/// - `$kind`: The `TokenKind` for this token
+/// - `$lexeme`: The lexeme string (should be 1 character)
+///
+/// # Returns
+///
+/// A complete `Token` with proper span information
+///
+/// # Note
+///
+/// This macro is deprecated in favor of `TokenBuilder::single_char_token`.
+/// It remains for backward compatibility.
 #[macro_export]
 macro_rules! single_char_token {
     ($lexer:expr, $start_idx:expr, $start_line:expr, $start_col:expr, $kind:expr, $lexeme:expr) => {{

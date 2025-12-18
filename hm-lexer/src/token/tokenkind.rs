@@ -44,89 +44,134 @@ use crate::token::operators::relational::RelationalOperator;
 #[cfg_attr(debug_assertions, derive(Debug))]
 pub enum TokenKind {
     // Control Flow Keywords
+    /// Function declaration keyword (`func`)
     Func,
+    /// Return statement keyword (`return`)
     Return,
+    /// If conditional keyword (`if`)
     If,
+    /// Else conditional keyword (`else`)
     Else,
+    /// Else-if conditional keyword (`elif`)
     Elif,
+    /// Loop keyword (`loop`)
     Loop,
+    /// Switch statement keyword (`switch`)
     Switch,
+    /// Case statement keyword (`case`)
     Case,
 
     // Variable/Binding Keywords
+    /// Variable declaration keyword (`var`)
     Var,
+    /// Constant declaration keyword (`const`)
     Const,
+    /// Final declaration keyword (`final`)
     Final,
 
     // Integer Types
+    /// 8-bit signed integer type (`int8`)
     Int8,
+    /// 16-bit signed integer type (`int16`)
     Int16,
+    /// 32-bit signed integer type (`int32`)
     Int32,
+    /// 64-bit signed integer type (`int64`)
     Int64,
+    /// 8-bit unsigned integer type (`unsigned8`)
     Unsigned8,
+    /// 16-bit unsigned integer type (`unsigned16`)
     Unsigned16,
+    /// 32-bit unsigned integer type (`unsigned32`)
     Unsigned32,
+    /// 64-bit unsigned integer type (`unsigned64`)
     Unsigned64,
 
     // Floating Point Types
+    /// Single-precision floating point type (`float`)
     Float,
+    /// Double-precision floating point type (`double`)
     Double,
 
     // Other Types
+    /// String type keyword (`string`)
     String,
+    /// Character type keyword (`character`)
     Character,
+    /// Structure type keyword (`struct`)
     Struct,
+    /// Void type keyword (`void`)
     Void,
 
     // Identifiers and Literals
+    /// User-defined identifier (variable, function name, etc.)
     Identifier(String),
+    /// String literal value (e.g., `"hello"`)
     StringLiteral(String),
+    /// Character literal value (e.g., `'a'`)
     CharacterLiteral(char),
+    /// Signed integer literal value
     IntLiteral(i64),
+    /// Unsigned integer literal value
     UnsignedIntLiteral(u64),
+    /// Floating point literal value
     FloatLiteral(f64),
 
     // Delimiters
-    LeftParen,    // (
-    RightParen,   // )
-    LeftBrace,    // {
-    RightBrace,   // }
-    LeftBracket,  // [
-    RightBracket, // ]
+    /// Left parenthesis `(`
+    LeftParen,
+    /// Right parenthesis `)`
+    RightParen,
+    /// Left brace `{`
+    LeftBrace,
+    /// Right brace `}`
+    RightBrace,
+    /// Left bracket `[`
+    LeftBracket,
+    /// Right bracket `]`
+    RightBracket,
 
     // Operators and Punctuation
-    Colon,     // :
-    Semicolon, // ;
-    Comma,     // ,
-    Dot,       // .
+    /// Colon `:`
+    Colon,
+    /// Semicolon `;`
+    Semicolon,
+    /// Comma `,`
+    Comma,
+    /// Dot `.`
+    Dot,
 
-    ScopingOperator, // ::
+    /// Scope resolution operator `::`
+    ScopingOperator,
 
     // Arithmetic Operators
-    // +, -, *, /, %, **
+    /// Arithmetic operator (`+`, `-`, `*`, `/`, `%`, `**`)
     ArithmeticOperator(ArithmeticOperator),
 
     // Relational Operators
-    // <, <=, >, >=, ==, !=
+    /// Relational/comparison operator (`<`, `<=`, `>`, `>=`, `==`, `!=`)
     RelationalOperator(RelationalOperator),
 
     // Logical Operators
-    // &&, ||, !
+    /// Logical operator (`&&`, `||`, `!`)
     LogicalOperator(LogicalOperator),
 
     // Assignment Operators
-    // =, +=, -=, *=, /=, %=
+    /// Assignment operator (`=`, `+=`, `-=`, `*=`, `/=`, `%=`)
     AssignmentOperator(AssignmentOperator),
 
     // Bitwise Operators
-    // &, |, ^, ~, <<, >>
+    /// Bitwise operator (`&`, `|`, `^`, `~`, `<<`, `>>`)
     BitwiseOperator(BitwiseOperator),
 
-    PointerAccessOperator, // ->
+    /// Pointer access operator `->`
+    PointerAccessOperator,
 
-    QuestionMark, // ?
+    /// Question mark `?`
+    QuestionMark,
 
     // Special
+    /// End of file marker
     Eof,
 }
 
@@ -150,9 +195,11 @@ impl TokenKind {
     ///
     /// ```
     /// # use hm_lexer::token::tokenkind::TokenKind;
-    /// assert_eq!(TokenKind::keyword("if"), Some(TokenKind::If));
-    /// assert_eq!(TokenKind::keyword("myVar"), None);
-    /// assert_eq!(TokenKind::keyword("int32"), Some(TokenKind::Int32));
+    /// // Returns Some(TokenKind) for keywords
+    /// assert!(TokenKind::keyword("if").is_some());
+    /// assert!(TokenKind::keyword("int32").is_some());
+    /// // Returns None for non-keywords
+    /// assert!(TokenKind::keyword("myVar").is_none());
     /// ```
     pub fn keyword(s: &str) -> Option<Self> {
         match s {

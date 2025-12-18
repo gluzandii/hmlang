@@ -258,7 +258,12 @@ fn lex_ampersand(stream: &mut CharStream) -> Result<Token, LexError> {
     }
 }
 
-/// Tokenize `|` or `||`
+/// Tokenize `|` (bitwise OR) or `||` (logical OR).
+///
+/// # Returns
+///
+/// - `||` → `LogicalOperator::Or`
+/// - `|` → `BitwiseOperator::Or`
 fn lex_pipe(stream: &mut CharStream) -> Result<Token, LexError> {
     let is_logical = stream.peek_n(1) == Some(b'|');
     let builder = TokenBuilder::new(stream);

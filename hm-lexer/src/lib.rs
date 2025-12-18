@@ -33,7 +33,14 @@
 //! # }
 //! ```
 
+/// Character stream for byte-level input processing.
 pub mod charstream;
+
+/// Main lexer implementation for tokenization.
 pub mod lexer;
+
+/// Error types for lexical analysis.
 pub mod lexerror;
+
+/// Token types and related structures.
 pub mod token;

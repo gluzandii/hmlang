@@ -1,3 +1,8 @@
+//! Trivia (whitespace and comments) handling.
+//!
+//! This module implements logic for skipping non-semantic elements in the
+//! source code, including whitespace and both line and block comments.
+
 use crate::lexer::Lexer;
 
 impl Lexer {

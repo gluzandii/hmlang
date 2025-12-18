@@ -1,3 +1,9 @@
+//! Parsing logic for literals and identifiers.
+//!
+//! This module contains implementations for parsing various token types
+//! including character literals, string literals, identifiers, keywords,
+//! and numeric literals (integers and floats).
+
 use crate::decode_escape;
 use crate::lexer::Lexer;
 use crate::lexerror::LexError;

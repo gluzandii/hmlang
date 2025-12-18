@@ -36,7 +36,12 @@ pub fn lex_delimiter(stream: &mut CharStream, byte: u8) -> Token {
     }
 }
 
-/// Tokenize `:` or `::`
+/// Tokenize `:` (colon) or `::` (scope resolution).
+///
+/// # Returns
+///
+/// - `::` → `TokenKind::ScopingOperator`
+/// - `:` → `TokenKind::Colon`
 pub fn lex_colon(stream: &mut CharStream) -> Token {
     let is_scope = stream.peek_n(1) == Some(b':');
     let builder = TokenBuilder::new(stream);

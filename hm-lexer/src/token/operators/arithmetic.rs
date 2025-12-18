@@ -8,7 +8,7 @@
 /// - `Percent`: Modulus operator (`%`)
 /// - `Exponent`: Exponentiation operator (`**`)
 #[cfg_attr(debug_assertions, derive(Debug, Clone, PartialEq, Eq))]
-pub enum ArithOperator {
+pub enum ArithmeticOperator {
     Plus,        // +
     Minus,       // -
     Asterisk,    // *

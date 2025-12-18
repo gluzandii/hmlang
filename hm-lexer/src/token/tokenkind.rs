@@ -3,8 +3,10 @@
 //! `TokenKind` enumerates all possible token types the lexer can produce,
 //! including keywords, identifiers, literals, delimiters, and operators.
 
-use crate::token::operators::arith::ArithOperator;
-use crate::token::operators::rel::RelationalOperator;
+use crate::token::operators::arithmetic::ArithmeticOperator;
+use crate::token::operators::logical::LogicalOperator;
+use crate::token::operators::relational::RelationalOperator;
+
 
 /// The type and classification of a token produced by the lexer.
 ///
@@ -98,14 +100,17 @@ pub enum TokenKind {
 
     // Arithmetic Operators
     // +, -, *, /, %, **
-    ArithmeticOperator(ArithOperator),
+    ArithmeticOperator(ArithmeticOperator),
 
     // Relational Operators
     // <, <=, >, >=, ==, !=
     RelationalOperator(RelationalOperator),
 
+    // Logical Operators
+    // &&, ||, !
+    LogicalOperator(LogicalOperator),
+
     Equal,       // =
-    Exclamation, // !
     Ampersand,   // &
     Pipe,        // |
     Caret,       // ^

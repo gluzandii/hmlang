@@ -1,6 +1,6 @@
 //! The main lexer (tokenizer) implementation for the Hummingbird language.
 //!
-//! The [`Lexer`] consumes characters from a [`crate::charstream::CharStream`] and produces [`crate::token::Token`]s.
+//! The [`Lexer`] consumes characters from a [`CharStream`] and produces [`Token`]s.
 //! It handles keywords, identifiers, literals (strings, characters, numbers), and operators.
 
 mod delimiters;
@@ -138,3 +138,16 @@ impl Lexer {
         Ok(token)
     }
 }
+
+impl Iterator for Lexer {
+    type Item = Result<Token, LexError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let t = self.next_token();
+        match t {
+            Ok(token) if token.is_eof() => None,
+            _ => Some(t),
+        }
+    }
+}
+

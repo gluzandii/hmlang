@@ -9,7 +9,8 @@ use thiserror::Error;
 ///
 /// All errors include line and column information to help with debugging
 /// and user-friendly error reporting.
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
+#[derive(Error)]
+#[cfg_attr(debug_assertions, derive(Debug))]
 pub enum LexError {
     /// Unexpected character at the given position.
     #[error("Unexpected character '{ch}' at line {line}, column {column}")]

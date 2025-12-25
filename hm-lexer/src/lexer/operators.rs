@@ -11,6 +11,7 @@ use crate::token::operators::assignment::AssignmentOperator;
 use crate::token::operators::bitwise::BitwiseOperator;
 use crate::token::operators::logical::LogicalOperator;
 use crate::token::operators::relational::RelationalOperator;
+use crate::token::operators::SpecialOperator;
 use crate::token::{tokenkind::TokenKind, Token};
 
 use super::token_builder::TokenBuilder;
@@ -96,15 +97,21 @@ fn lex_plus(stream: &mut CharStream) -> Result<Token, LexError> {
     }
 }
 
-/// Tokenize `-` or `-=`
+/// Tokenize `-` or `-=` or `->`
 fn lex_minus(stream: &mut CharStream) -> Result<Token, LexError> {
-    let is_assign = stream.peek_n(1) == Some(b'=');
+    let next = stream.peek_n(1);
     let builder = TokenBuilder::new(stream);
-    if is_assign {
+    if next == Some(b'=') {
         Ok(builder.multi_char_token(
             2,
             TokenKind::AssignmentOperator(AssignmentOperator::SubtractAssign),
             "-=",
+        ))
+    } else if next == Some(b'>') {
+        Ok(builder.multi_char_token(
+            2,
+            TokenKind::SpecialOperator(SpecialOperator::PointerAccess),
+            "->",
         ))
     } else {
         Ok(builder.single_char_token(

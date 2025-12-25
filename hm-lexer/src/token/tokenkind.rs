@@ -142,14 +142,16 @@ impl TokenKind {
             "u64" => Some(KeywordKind::Unsigned64),
 
             // Floating Point Types
-            "float" => Some(KeywordKind::Float),
-            "double" => Some(KeywordKind::Double),
+            "f32" => Some(KeywordKind::Float32),
+            "f64" => Some(KeywordKind::Float64),
 
             // Other Types
             "string" => Some(KeywordKind::String),
-            "character" => Some(KeywordKind::Character),
+            "char" => Some(KeywordKind::Char),
             "struct" => Some(KeywordKind::Struct),
-            "void" => Some(KeywordKind::Void),
+            "bool" => Some(KeywordKind::Bool),
+
+            "import" => Some(KeywordKind::Import),
 
             _ => None,
         };

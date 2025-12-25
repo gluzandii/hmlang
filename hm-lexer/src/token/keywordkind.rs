@@ -50,17 +50,21 @@ pub enum KeywordKind {
 
     /// Floating point numeric types
     /// Single-precision floating point
-    Float,
+    Float32,
     /// Double-precision floating point
-    Double,
+    Float64,
 
     /// Other built-in or composite types
     /// UTF-8 encoded string type
     String,
     /// Single Unicode scalar value
-    Character,
+    Char,
     /// User-defined composite data type
     Struct,
-    /// No return type
-    Void,
+
+    /// Boolean type
+    Bool,
+
+    /// Module Import
+    Import,
 }

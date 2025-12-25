@@ -195,15 +195,18 @@ impl Lexer {
 
     /// Tokenize a numeric literal.
     ///
-    /// Supports decimal integers and floating point numbers.
-    /// The method accumulates digits, optionally a decimal point and more digits,
-    /// then attempts to parse them as either an `i64` or `f64`.
+    /// Supports:
+    /// - Signed integers: `123`
+    /// - Unsigned integers: `123u`
+    /// - Floating point numbers: `123.45`
     ///
     /// # Returns
     ///
-    /// - `Ok(Token)` with `TokenKind::IntLiteral` for integers
+    /// - `Ok(Token)` with `TokenKind::IntLiteral` for signed integers
+    /// - `Ok(Token)` with `TokenKind::UnsignedIntLiteral` for unsigned integers (ending with `u`)
     /// - `Ok(Token)` with `TokenKind::FloatLiteral` for floating point numbers
     /// - `Err(LexError::InvalidNumber)` if the number is malformed or out of range
+    /// - `Err(LexError::InvalidNumber)` if `u` suffix is used with a decimal point
     pub(super) fn lex_number(&mut self) -> Result<Token, LexError> {
         let (start_idx, start_line, start_col) = self.stream.current_position();
 
@@ -226,6 +229,23 @@ impl Lexer {
             false
         };
 
+        // Check for 'u' suffix (unsigned integer indicator)
+        let is_unsigned = self.stream.peek() == Some(b'u');
+        if is_unsigned {
+            // Error: cannot use 'u' suffix with floating point numbers
+            if is_float {
+                let (end_idx, _, _) = self.stream.current_position();
+                let lexeme_bytes = self.stream.slice(lex_start, end_idx);
+                let lexeme = String::from_utf8_lossy(lexeme_bytes).to_string();
+                return Err(LexError::InvalidNumber {
+                    lexeme,
+                    line: start_line,
+                    column: start_col,
+                });
+            }
+            self.stream.advance(); // consume 'u'
+        }
+
         let (end_idx, end_line, end_col) = self.stream.current_position();
 
         // Get the lexeme as a string
@@ -245,8 +265,21 @@ impl Lexer {
                     });
                 }
             }
+        } else if is_unsigned {
+            // Try to parse as unsigned integer (remove the 'u' suffix)
+            let num_str = &lexeme[..lexeme.len() - 1];
+            match num_str.parse::<u64>() {
+                Ok(val) => TokenKind::Literal(LiteralKind::UnsignedIntLiteral(val)),
+                Err(_) => {
+                    return Err(LexError::InvalidNumber {
+                        lexeme,
+                        line: start_line,
+                        column: start_col,
+                    });
+                }
+            }
         } else {
-            // Try to parse as integer
+            // Try to parse as signed integer
             match lexeme.parse::<i64>() {
                 Ok(val) => TokenKind::Literal(LiteralKind::IntLiteral(val)),
                 Err(_) => {

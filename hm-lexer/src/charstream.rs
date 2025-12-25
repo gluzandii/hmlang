@@ -79,6 +79,7 @@ impl CharStream {
     /// Peek at the current byte without advancing.
     ///
     /// Returns `None` at end of input. Does not alter the cursor state.
+    #[inline]
     pub fn peek(&self) -> Option<u8> {
         self.peek_n(0)
     }
@@ -132,6 +133,7 @@ impl CharStream {
     /// stream.advance_n(5);
     /// # assert!(stream.is_eof());
     /// ```
+    #[inline]
     pub fn advance_n(&mut self, n: usize) {
         for _ in 0..n {
             if self.advance().is_none() {

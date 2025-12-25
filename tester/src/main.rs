@@ -5,7 +5,7 @@ use hm_lexer::charstream::CharStream;
 fn main() {
     use hm_lexer::lexer::Lexer;
     let mut lexer =
-        Lexer::new(CharStream::from_str("var x = 10;").expect("Failed to create CharStream"));
+        Lexer::new(CharStream::from_str("func main() { return 2320u;").expect("Failed to create CharStream"));
 
     loop {
         let token = lexer.next_token().expect("Failed to get next token");

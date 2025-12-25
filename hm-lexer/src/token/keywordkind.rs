@@ -30,7 +30,17 @@ pub enum KeywordKind {
     /// Immutable variable after initialization
     Final,
 
-    /// Signed and unsigned integer types
+    /// Keywords for data types
+    Type(TypeKind),
+
+    /// Module Import
+    Import,
+}
+
+/// Represents built-in data types in the language.
+/// This enum is used to classify type keywords.
+#[cfg_attr(debug_assertions, derive(Debug))]
+pub enum TypeKind {
     /// 8-bit signed integer
     Int8,
     /// 16-bit signed integer
@@ -64,7 +74,4 @@ pub enum KeywordKind {
 
     /// Boolean type
     Bool,
-
-    /// Module Import
-    Import,
 }

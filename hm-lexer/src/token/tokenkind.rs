@@ -5,6 +5,7 @@
 
 use crate::token::delimiterkind::DelimiterKind;
 use crate::token::keywordkind::KeywordKind;
+use crate::token::keywordkind::TypeKind;
 use crate::token::literalkind::LiteralKind;
 use crate::token::operators::arithmetic::ArithmeticOperator;
 use crate::token::operators::assignment::AssignmentOperator;
@@ -132,24 +133,24 @@ impl TokenKind {
             "final" => Some(KeywordKind::Final),
 
             // Integer Types
-            "i8" => Some(KeywordKind::Int8),
-            "i16" => Some(KeywordKind::Int16),
-            "i32" => Some(KeywordKind::Int32),
-            "i64" => Some(KeywordKind::Int64),
-            "u8" => Some(KeywordKind::Unsigned8),
-            "u16" => Some(KeywordKind::Unsigned16),
-            "u32" => Some(KeywordKind::Unsigned32),
-            "u64" => Some(KeywordKind::Unsigned64),
+            "i8" => Some(KeywordKind::Type(TypeKind::Int8)),
+            "i16" => Some(KeywordKind::Type(TypeKind::Int16)),
+            "i32" => Some(KeywordKind::Type(TypeKind::Int32)),
+            "i64" => Some(KeywordKind::Type(TypeKind::Int64)),
+            "u8" => Some(KeywordKind::Type(TypeKind::Unsigned8)),
+            "u16" => Some(KeywordKind::Type(TypeKind::Unsigned16)),
+            "u32" => Some(KeywordKind::Type(TypeKind::Unsigned32)),
+            "u64" => Some(KeywordKind::Type(TypeKind::Unsigned64)),
 
             // Floating Point Types
-            "f32" => Some(KeywordKind::Float32),
-            "f64" => Some(KeywordKind::Float64),
+            "f32" => Some(KeywordKind::Type(TypeKind::Float32)),
+            "f64" => Some(KeywordKind::Type(TypeKind::Float64)),
 
             // Other Types
-            "string" => Some(KeywordKind::String),
-            "char" => Some(KeywordKind::Char),
-            "struct" => Some(KeywordKind::Struct),
-            "bool" => Some(KeywordKind::Bool),
+            "string" => Some(KeywordKind::Type(TypeKind::String)),
+            "char" => Some(KeywordKind::Type(TypeKind::Char)),
+            "struct" => Some(KeywordKind::Type(TypeKind::Struct)),
+            "bool" => Some(KeywordKind::Type(TypeKind::Bool)),
 
             "import" => Some(KeywordKind::Import),
 

@@ -14,7 +14,7 @@
 /// - `LeftShift`: Left shift (`<<`) - shifts bits left, filling with zeros
 /// - `RightShift`: Right shift (`>>`) - shifts bits right
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum BitwiseOperator {
+pub enum BitwiseOps {
     /// Bitwise AND operator (`&`)
     And,
     /// Bitwise OR operator (`|`)

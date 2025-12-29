@@ -14,7 +14,7 @@
 /// - `Equal`: Equality comparison (`==`)
 /// - `NotEqual`: Inequality comparison (`!=`)
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum RelationalOperator {
+pub enum RelationalOps {
     /// Less than operator (`<`)
     LessThan,
     /// Greater than operator (`>`)

@@ -3,7 +3,7 @@
 /// This enum is used by the lexer and parser to classify tokens
 /// that have special syntactic meaning.
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum KeywordKind {
+pub enum Keywords {
     /// Keywords that affect control flow (branching, looping, returning)
     /// Declares a function
     Func,

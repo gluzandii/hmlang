@@ -4,7 +4,7 @@
 ///
 /// Used to group expressions, separate statements, and mark boundaries in code.
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum DelimiterKind {
+pub enum Delimiters {
     /// Left parenthesis `(`
     LeftParen,
     /// Right parenthesis `)`

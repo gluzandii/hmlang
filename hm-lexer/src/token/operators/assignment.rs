@@ -14,7 +14,7 @@
 /// - `DivideAssign`: Division assignment (`/=`)
 /// - `ModuloAssign`: Modulo assignment (`%=`)
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum AssignmentOperator {
+pub enum AssignmentOps {
     /// Simple assignment operator (`=`)
     Assign,
     /// Addition assignment operator (`+=`)

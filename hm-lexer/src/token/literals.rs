@@ -19,13 +19,13 @@
 /// # Example
 ///
 /// ```
-/// # use hm_lexer::token::literalkind::LiteralKind;
-/// let str_lit = LiteralKind::StringLiteral("hello".to_string());
-/// let int_lit = LiteralKind::IntLiteral(42);
-/// let float_lit = LiteralKind::FloatLiteral(3.14);
+/// # use hm_lexer::token::literals::Literals;
+/// let str_lit = Literals::StringLiteral("hello".to_string());
+/// let int_lit = Literals::IntLiteral(42);
+/// let float_lit = Literals::FloatLiteral(3.14);
 /// ```
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum LiteralKind {
+pub enum Literals {
     /// String literal value (e.g., `"hello"`)
     StringLiteral(String),
     /// Character literal value (e.g., `'a'`)

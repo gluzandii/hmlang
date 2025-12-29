@@ -6,9 +6,9 @@
 pub mod span;
 pub mod tokenkind;
 pub mod operators;
-pub mod keywordkind;
-pub mod literalkind;
-pub mod delimiterkind;
+pub mod keywords;
+pub mod literals;
+pub mod delimiters;
 
 /// A single token produced by the lexer.
 ///

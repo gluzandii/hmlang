@@ -14,7 +14,7 @@
 /// - `Modulo`: Modulus/remainder operator (`%`)
 /// - `Exponent`: Exponentiation operator (`**`)
 #[cfg_attr(debug_assertions, derive(Debug, Clone, PartialEq, Eq))]
-pub enum ArithmeticOperator {
+pub enum ArithmeticOps {
     /// Addition operator (`+`)
     Plus,
     /// Subtraction operator (`-`)

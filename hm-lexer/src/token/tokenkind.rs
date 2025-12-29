@@ -3,16 +3,16 @@
 //! `TokenKind` enumerates all possible token types the lexer can produce,
 //! including keywords, identifiers, literals, delimiters, and operators.
 
-use crate::token::delimiterkind::DelimiterKind;
-use crate::token::keywordkind::KeywordKind;
-use crate::token::keywordkind::TypeKind;
-use crate::token::literalkind::LiteralKind;
-use crate::token::operators::arithmetic::ArithmeticOperator;
-use crate::token::operators::assignment::AssignmentOperator;
-use crate::token::operators::bitwise::BitwiseOperator;
-use crate::token::operators::logical::LogicalOperator;
-use crate::token::operators::relational::RelationalOperator;
-use crate::token::operators::SpecialOperator;
+use crate::token::delimiters::Delimiters;
+use crate::token::keywords::Keywords;
+use crate::token::keywords::TypeKind;
+use crate::token::literals::Literals;
+use crate::token::operators::arithmetic::ArithmeticOps;
+use crate::token::operators::assignment::AssignmentOps;
+use crate::token::operators::bitwise::BitwiseOps;
+use crate::token::operators::logical::LogicalOps;
+use crate::token::operators::relational::RelationalOps;
+use crate::token::operators::SpecialOps;
 
 /// The type and classification of a token produced by the lexer.
 ///
@@ -49,40 +49,40 @@ use crate::token::operators::SpecialOperator;
 pub enum TokenKind {
     // Keywords
     /// Reserved keyword in the HM language
-    Keyword(KeywordKind),
+    Keyword(Keywords),
 
     // Identifiers and Literals
     /// User-defined identifier (variable, function name, etc.)
     Identifier(String),
 
     /// All literal types
-    Literal(LiteralKind),
+    Literal(Literals),
 
     /// Delimiter symbols (parentheses, braces, brackets, etc.)
-    Delimiter(DelimiterKind),
+    Delimiter(Delimiters),
 
     // Arithmetic Operators
     /// Arithmetic operator (`+`, `-`, `*`, `/`, `%`, `**`)
-    ArithmeticOperator(ArithmeticOperator),
+    ArithmeticOperator(ArithmeticOps),
 
     // Relational Operators
     /// Relational/comparison operator (`<`, `<=`, `>`, `>=`, `==`, `!=`)
-    RelationalOperator(RelationalOperator),
+    RelationalOperator(RelationalOps),
 
     // Logical Operators
     /// Logical operator (`&&`, `||`, `!`)
-    LogicalOperator(LogicalOperator),
+    LogicalOperator(LogicalOps),
 
     // Assignment Operators
     /// Assignment operator (`=`, `+=`, `-=`, `*=`, `/=`, `%=`)
-    AssignmentOperator(AssignmentOperator),
+    AssignmentOperator(AssignmentOps),
 
     // Bitwise Operators
     /// Bitwise operator (`&`, `|`, `^`, `~`, `<<`, `>>`)
-    BitwiseOperator(BitwiseOperator),
+    BitwiseOperator(BitwiseOps),
 
     /// Special operators (`::`, `->`)
-    SpecialOperator(SpecialOperator),
+    SpecialOperator(SpecialOps),
 
     // Special
     /// End of file marker
@@ -118,41 +118,41 @@ impl TokenKind {
     pub fn keyword(s: &str) -> Option<Self> {
         let kw = match s {
             // Control Flow
-            "func" => Some(KeywordKind::Func),
-            "return" => Some(KeywordKind::Return),
-            "if" => Some(KeywordKind::If),
-            "else" => Some(KeywordKind::Else),
-            "elif" => Some(KeywordKind::Elif),
-            "loop" => Some(KeywordKind::Loop),
-            "switch" => Some(KeywordKind::Switch),
-            "case" => Some(KeywordKind::Case),
+            "func" => Some(Keywords::Func),
+            "return" => Some(Keywords::Return),
+            "if" => Some(Keywords::If),
+            "else" => Some(Keywords::Else),
+            "elif" => Some(Keywords::Elif),
+            "loop" => Some(Keywords::Loop),
+            "switch" => Some(Keywords::Switch),
+            "case" => Some(Keywords::Case),
 
             // Variable/Binding
-            "var" => Some(KeywordKind::Var),
-            "const" => Some(KeywordKind::Const),
-            "final" => Some(KeywordKind::Final),
+            "var" => Some(Keywords::Var),
+            "const" => Some(Keywords::Const),
+            "final" => Some(Keywords::Final),
 
             // Integer Types
-            "i8" => Some(KeywordKind::Type(TypeKind::Int8)),
-            "i16" => Some(KeywordKind::Type(TypeKind::Int16)),
-            "i32" => Some(KeywordKind::Type(TypeKind::Int32)),
-            "i64" => Some(KeywordKind::Type(TypeKind::Int64)),
-            "u8" => Some(KeywordKind::Type(TypeKind::Unsigned8)),
-            "u16" => Some(KeywordKind::Type(TypeKind::Unsigned16)),
-            "u32" => Some(KeywordKind::Type(TypeKind::Unsigned32)),
-            "u64" => Some(KeywordKind::Type(TypeKind::Unsigned64)),
+            "i8" => Some(Keywords::Type(TypeKind::Int8)),
+            "i16" => Some(Keywords::Type(TypeKind::Int16)),
+            "i32" => Some(Keywords::Type(TypeKind::Int32)),
+            "i64" => Some(Keywords::Type(TypeKind::Int64)),
+            "u8" => Some(Keywords::Type(TypeKind::Unsigned8)),
+            "u16" => Some(Keywords::Type(TypeKind::Unsigned16)),
+            "u32" => Some(Keywords::Type(TypeKind::Unsigned32)),
+            "u64" => Some(Keywords::Type(TypeKind::Unsigned64)),
 
             // Floating Point Types
-            "f32" => Some(KeywordKind::Type(TypeKind::Float32)),
-            "f64" => Some(KeywordKind::Type(TypeKind::Float64)),
+            "f32" => Some(Keywords::Type(TypeKind::Float32)),
+            "f64" => Some(Keywords::Type(TypeKind::Float64)),
 
             // Other Types
-            "string" => Some(KeywordKind::Type(TypeKind::String)),
-            "char" => Some(KeywordKind::Type(TypeKind::Char)),
-            "struct" => Some(KeywordKind::Type(TypeKind::Struct)),
-            "bool" => Some(KeywordKind::Type(TypeKind::Bool)),
+            "string" => Some(Keywords::Type(TypeKind::String)),
+            "char" => Some(Keywords::Type(TypeKind::Char)),
+            "struct" => Some(Keywords::Type(TypeKind::Struct)),
+            "bool" => Some(Keywords::Type(TypeKind::Bool)),
 
-            "import" => Some(KeywordKind::Import),
+            "import" => Some(Keywords::Import),
 
             _ => None,
         };

@@ -6,12 +6,12 @@
 
 use crate::charstream::CharStream;
 use crate::lexerror::LexError;
-use crate::token::operators::arithmetic::ArithmeticOperator;
-use crate::token::operators::assignment::AssignmentOperator;
-use crate::token::operators::bitwise::BitwiseOperator;
-use crate::token::operators::logical::LogicalOperator;
-use crate::token::operators::relational::RelationalOperator;
-use crate::token::operators::SpecialOperator;
+use crate::token::operators::arithmetic::ArithmeticOps;
+use crate::token::operators::assignment::AssignmentOps;
+use crate::token::operators::bitwise::BitwiseOps;
+use crate::token::operators::logical::LogicalOps;
+use crate::token::operators::relational::RelationalOps;
+use crate::token::operators::SpecialOps;
 use crate::token::{tokenkind::TokenKind, Token};
 
 use super::token_builder::TokenBuilder;
@@ -46,14 +46,14 @@ pub fn lex_operator(stream: &mut CharStream, byte: u8) -> Result<Token, LexError
         b'^' => {
             let builder = TokenBuilder::new(stream);
             Ok(builder.single_char_token(
-                TokenKind::BitwiseOperator(BitwiseOperator::Xor),
+                TokenKind::BitwiseOperator(BitwiseOps::Xor),
                 "^",
             ))
         }
         b'~' => {
             let builder = TokenBuilder::new(stream);
             Ok(builder.single_char_token(
-                TokenKind::BitwiseOperator(BitwiseOperator::Not),
+                TokenKind::BitwiseOperator(BitwiseOps::Not),
                 "~",
             ))
         }
@@ -68,12 +68,12 @@ fn lex_equals(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_equal {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::RelationalOperator(RelationalOperator::Equal),
+            TokenKind::RelationalOperator(RelationalOps::Equal),
             "==",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::AssignmentOperator(AssignmentOperator::Assign),
+            TokenKind::AssignmentOperator(AssignmentOps::Assign),
             "=",
         ))
     }
@@ -86,12 +86,12 @@ fn lex_plus(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_assign {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::AssignmentOperator(AssignmentOperator::AddAssign),
+            TokenKind::AssignmentOperator(AssignmentOps::AddAssign),
             "+=",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Plus),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Plus),
             "+",
         ))
     }
@@ -104,18 +104,18 @@ fn lex_minus(stream: &mut CharStream) -> Result<Token, LexError> {
     if next == Some(b'=') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::AssignmentOperator(AssignmentOperator::SubtractAssign),
+            TokenKind::AssignmentOperator(AssignmentOps::SubtractAssign),
             "-=",
         ))
     } else if next == Some(b'>') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::SpecialOperator(SpecialOperator::PointerAccess),
+            TokenKind::SpecialOperator(SpecialOps::PointerAccess),
             "->",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Minus),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Minus),
             "-",
         ))
     }
@@ -128,18 +128,18 @@ fn lex_asterisk(stream: &mut CharStream) -> Result<Token, LexError> {
     if next == Some(b'=') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::AssignmentOperator(AssignmentOperator::MultiplyAssign),
+            TokenKind::AssignmentOperator(AssignmentOps::MultiplyAssign),
             "*=",
         ))
     } else if next == Some(b'*') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Exponent),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Exponent),
             "**",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Asterisk),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Asterisk),
             "*",
         ))
     }
@@ -152,12 +152,12 @@ fn lex_slash(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_assign {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::AssignmentOperator(AssignmentOperator::DivideAssign),
+            TokenKind::AssignmentOperator(AssignmentOps::DivideAssign),
             "/=",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Slash),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Slash),
             "/",
         ))
     }
@@ -170,12 +170,12 @@ fn lex_modulo(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_assign {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::AssignmentOperator(AssignmentOperator::ModuloAssign),
+            TokenKind::AssignmentOperator(AssignmentOps::ModuloAssign),
             "%=",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::ArithmeticOperator(ArithmeticOperator::Modulo),
+            TokenKind::ArithmeticOperator(ArithmeticOps::Modulo),
             "%",
         ))
     }
@@ -188,18 +188,18 @@ fn lex_less_than(stream: &mut CharStream) -> Result<Token, LexError> {
     if next == Some(b'=') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::RelationalOperator(RelationalOperator::LessThanOrEqual),
+            TokenKind::RelationalOperator(RelationalOps::LessThanOrEqual),
             "<=",
         ))
     } else if next == Some(b'<') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::BitwiseOperator(BitwiseOperator::LeftShift),
+            TokenKind::BitwiseOperator(BitwiseOps::LeftShift),
             "<<",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::RelationalOperator(RelationalOperator::LessThan),
+            TokenKind::RelationalOperator(RelationalOps::LessThan),
             "<",
         ))
     }
@@ -212,18 +212,18 @@ fn lex_greater_than(stream: &mut CharStream) -> Result<Token, LexError> {
     if next == Some(b'=') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::RelationalOperator(RelationalOperator::GreaterThanOrEqual),
+            TokenKind::RelationalOperator(RelationalOps::GreaterThanOrEqual),
             ">=",
         ))
     } else if next == Some(b'>') {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::BitwiseOperator(BitwiseOperator::RightShift),
+            TokenKind::BitwiseOperator(BitwiseOps::RightShift),
             ">>",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::RelationalOperator(RelationalOperator::GreaterThan),
+            TokenKind::RelationalOperator(RelationalOps::GreaterThan),
             ">",
         ))
     }
@@ -236,12 +236,12 @@ fn lex_not(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_not_equal {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::RelationalOperator(RelationalOperator::NotEqual),
+            TokenKind::RelationalOperator(RelationalOps::NotEqual),
             "!=",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::LogicalOperator(LogicalOperator::Not),
+            TokenKind::LogicalOperator(LogicalOps::Not),
             "!",
         ))
     }
@@ -254,12 +254,12 @@ fn lex_ampersand(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_logical {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::LogicalOperator(LogicalOperator::And),
+            TokenKind::LogicalOperator(LogicalOps::And),
             "&&",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::BitwiseOperator(BitwiseOperator::And),
+            TokenKind::BitwiseOperator(BitwiseOps::And),
             "&",
         ))
     }
@@ -277,12 +277,12 @@ fn lex_pipe(stream: &mut CharStream) -> Result<Token, LexError> {
     if is_logical {
         Ok(builder.multi_char_token(
             2,
-            TokenKind::LogicalOperator(LogicalOperator::Or),
+            TokenKind::LogicalOperator(LogicalOps::Or),
             "||",
         ))
     } else {
         Ok(builder.single_char_token(
-            TokenKind::BitwiseOperator(BitwiseOperator::Or),
+            TokenKind::BitwiseOperator(BitwiseOps::Or),
             "|",
         ))
     }

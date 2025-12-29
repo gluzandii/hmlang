@@ -17,7 +17,7 @@ pub mod bitwise;
 ////
 /// This enum includes operators like pointer access and scope resolution.
 #[cfg_attr(debug_assertions, derive(Debug))]
-pub enum SpecialOperator {
+pub enum SpecialOps {
     /// Pointer access operator `->`
     PointerAccess,
 

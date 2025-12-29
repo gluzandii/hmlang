@@ -11,7 +11,7 @@
 /// - `Or`: Logical OR operator (`||`) - true if at least one operand is true
 /// - `Not`: Logical NOT operator (`!`) - inverts a boolean value
 #[cfg_attr(debug_assertions, derive(Debug, Clone, PartialEq, Eq))]
-pub enum LogicalOperator {
+pub enum LogicalOps {
     /// Logical AND operator (`&&`)
     And,
     /// Logical OR operator (`||`)

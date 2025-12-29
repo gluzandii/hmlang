@@ -7,7 +7,7 @@
 use crate::decode_escape;
 use crate::lexer::Lexer;
 use crate::lexerror::LexError;
-use crate::token::literalkind::LiteralKind;
+use crate::token::literals::Literals;
 use crate::token::span::Span;
 use crate::token::tokenkind::TokenKind;
 use crate::token::Token;
@@ -75,7 +75,7 @@ impl Lexer {
         };
 
         Ok(Token {
-            kind: TokenKind::Literal(LiteralKind::CharacterLiteral(ch)),
+            kind: TokenKind::Literal(Literals::CharacterLiteral(ch)),
             span,
             lexeme,
         })
@@ -147,7 +147,7 @@ impl Lexer {
         };
 
         Ok(Token {
-            kind: TokenKind::Literal(LiteralKind::StringLiteral(decoded)),
+            kind: TokenKind::Literal(Literals::StringLiteral(decoded)),
             span,
             lexeme,
         })
@@ -256,7 +256,7 @@ impl Lexer {
         let kind = if is_float {
             // Validate the float by parsing it
             match lexeme.parse::<f64>() {
-                Ok(f) => TokenKind::Literal(LiteralKind::FloatLiteral(f)),
+                Ok(f) => TokenKind::Literal(Literals::FloatLiteral(f)),
                 Err(_) => {
                     return Err(LexError::InvalidNumber {
                         lexeme,
@@ -269,7 +269,7 @@ impl Lexer {
             // Try to parse as unsigned integer (remove the 'u' suffix)
             let num_str = &lexeme[..lexeme.len() - 1];
             match num_str.parse::<u64>() {
-                Ok(val) => TokenKind::Literal(LiteralKind::UnsignedIntLiteral(val)),
+                Ok(val) => TokenKind::Literal(Literals::UnsignedIntLiteral(val)),
                 Err(_) => {
                     return Err(LexError::InvalidNumber {
                         lexeme,
@@ -281,7 +281,7 @@ impl Lexer {
         } else {
             // Try to parse as signed integer
             match lexeme.parse::<i64>() {
-                Ok(val) => TokenKind::Literal(LiteralKind::IntLiteral(val)),
+                Ok(val) => TokenKind::Literal(Literals::IntLiteral(val)),
                 Err(_) => {
                     return Err(LexError::InvalidNumber {
                         lexeme,
